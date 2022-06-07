@@ -3,26 +3,25 @@ import baseApi from "./baseApi";
 class IpfsService {
 
     getAllData() {
-        return baseApi.get('/ipfs');
+        return baseApi.get('/');
     }
 
     getById(id: number) {
         return baseApi.get('/ipfs/:id');
     }
 
-    createFile(
-        originalname: string,
-        mimetype: string,
-        filename: string,
-        size: number,
-    ) {
-        return baseApi.post('/file',{
-        originalname,
-        mimetype,
-        filename,
-        size
-        });
+    createFile(file: Blob) {
+        // formData
+        let imageData = new FormData();
+        imageData.append('file', file);
+
+        return baseApi.post('/file', imageData, {
+             headers: {
+                'Content-Type': "multipart/form"
+              }
+        }
+        );
     }
 }
 
-export default new IpfsService;
+export default new IpfsService();

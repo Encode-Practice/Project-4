@@ -1,27 +1,27 @@
-import ethers from 'ethers';
-import TokenContract from '../assets/contracts/Token.json';
+import { providers,utils, getDefaultProvider, Wallet, Contract} from 'ethers';
+let TokenContract = require("../assets/contracts/Token.sol/TeamG.json");
 
 
 class BlockchainService {
     
-    provider: ethers.providers.BaseProvider;
-    userWallet: ethers.Wallet;
-    tokenContractInstance: ethers.Contract;
+    provider: providers.BaseProvider;
+    userWallet: Wallet;
+    tokenContractInstance: Contract;
     tokenContractAddress: string;
   
     constructor() {
    
         this.tokenContractAddress = process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS || ""
         this.provider = this.getProvider();
-        this.userWallet = ethers.Wallet.createRandom().connect(this.provider);
-        this.tokenContractInstance = new ethers.Contract(
+        this.userWallet = Wallet.createRandom().connect(this.provider);
+        this.tokenContractInstance = new Contract(
         this.tokenContractAddress,
         TokenContract.abi
         ).connect(this.userWallet);
       }
     
       getProvider() {
-        return ethers.getDefaultProvider(process.env.REACT_APP_NETWORK);
+        return getDefaultProvider(process.env.REACT_APP_NETWORK);
       }
     
       async address() {
@@ -33,7 +33,7 @@ class BlockchainService {
         const etherBalanceBN = await this.provider.getBalance(
           this.userWallet.address
         );
-        const etherBalance = ethers.utils.formatEther(etherBalanceBN) + ' ETH';
+        const etherBalance = utils.formatEther(etherBalanceBN) + ' ETH';
         return etherBalance;
       }
     
@@ -64,7 +64,7 @@ class BlockchainService {
     
       async supply() {
         const supplyBN = await this.tokenContractInstance.totalSupply();
-        const supply = ethers.utils.formatEther(supplyBN);
+        const supply = utils.formatEther(supplyBN);
         return supply + ' Tokens';
       }
     
@@ -72,7 +72,7 @@ class BlockchainService {
         const tokenBalanceBN = await this.tokenContractInstance.balanceOf(
           this.userWallet.address
         );
-        const tokenBalance = ethers.utils.formatEther(tokenBalanceBN);
+        const tokenBalance = utils.formatEther(tokenBalanceBN);
         return tokenBalance + ' Tokens';
       }
           
@@ -86,4 +86,4 @@ class BlockchainService {
     }   
 }
 
-export default new BlockchainService;
+export default new BlockchainService();

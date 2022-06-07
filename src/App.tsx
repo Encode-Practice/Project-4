@@ -1,12 +1,22 @@
-import React from 'react';
-
-import './App.css';
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from './pages/Home';
+import Upload from './pages/Upload';
+import Tab from  './components/Tab';
+import Wallet from "./pages/Wallet";
 
 function App() {
   return (
-    <div className="App">
-     <h2>Hi there</h2>
-    </div>
+    <BrowserRouter >
+    <Routes>
+        <Route  path="/" element={<Home />} />       
+        <Route  element={<Tab />}>
+           <Route path="/images/upload" element={<Upload />} />
+           <Route path="/wallet" element={<Wallet />} />
+           {/* <Route path="/images/all" element={<DatabaseView />} /> */}
+        </Route>
+    </Routes>
+</BrowserRouter>
   );
 }
 
